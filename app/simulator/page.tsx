@@ -2,6 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+<div className="flex items-center gap-3 mb-6">
+  <input
+    type="checkbox"
+    checked={recruiterMode}
+    onChange={() => setRecruiterMode(!recruiterMode)}
+  />
+  <span className="text-sm text-gray-400">
+    Recruiter Mode (show my preferred decision)
+  </span>
+</div>
 
 const scenarios = [
   {
@@ -13,11 +23,16 @@ const scenarios = [
       "Repeat rate steady at 32%",
       "Inventory constrained for 6 weeks",
     ],
+    preferredDecision: "WAIT",
     reasoning: {
       ACT: "Momentum is strong and delay risks losing the market.",
-      WAIT: "Demand is real but supply constraints make scaling risky.",
-      KILL: "Marketing spend without inventory destroys trust.",
+      WAIT:
+        "Demand is real, but supply and CAC constraints make scaling premature.",
+      KILL:
+        "Marketing spend without fulfillment readiness damages brand trust.",
     },
+    myLogic:
+      "I chose WAIT because it preserves upside while fixing execution bottlenecks. Acting now increases burn without improving long-term ROI.",
   },
   {
     title: "Launch Premium Serum Variant?",
@@ -28,11 +43,17 @@ const scenarios = [
       "Manufacturing cost +22%",
       "Brand awareness still mid-level",
     ],
+    preferredDecision: "ACT",
     reasoning: {
-      ACT: "High LTV users justify premium expansion.",
-      WAIT: "Brand pull isn’t strong enough yet.",
-      KILL: "Premium too early will dilute brand.",
+      ACT:
+        "High-LTV users justify premium expansion with controlled positioning.",
+      WAIT:
+        "Brand pull isn’t strong enough yet for mass premium perception.",
+      KILL:
+        "Premium too early risks confusing value-conscious users.",
     },
+    myLogic:
+      "I chose ACT because the data supports a targeted premium launch, not mass rollout. This maximizes LTV without brand dilution.",
   },
   {
     title: "Enter Quick Commerce (10-min delivery)?",
@@ -43,17 +64,24 @@ const scenarios = [
       "Returns increase 9%",
       "Brand visibility improves",
     ],
+    preferredDecision: "WAIT",
     reasoning: {
-      ACT: "Visibility and speed outweigh margin loss.",
-      WAIT: "Test in one city before full rollout.",
-      KILL: "Quick commerce harms premium perception.",
+      ACT:
+        "Speed and visibility could unlock new demand pools.",
+      WAIT:
+        "Pilot in one city to validate economics before committing.",
+      KILL:
+        "Quick commerce undermines premium brand positioning.",
     },
+    myLogic:
+      "WAIT allows learning without permanent margin damage. Speed is valuable, but brand equity is harder to rebuild.",
   },
 ];
 
 export default function DecisionSimulator() {
   const [index, setIndex] = useState(0);
   const [choice, setChoice] = useState<string | null>(null);
+  const [recruiterMode, setRecruiterMode] = useState(false);
 
   const scenario = scenarios[index];
 
