@@ -2,125 +2,86 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import NavBar from "../components/NavBar";
 
 type Decision = "ACT" | "WAIT" | "KILL";
 
-/* =========================
-   Decision Quality Logic
-========================= */
-function evaluateDecision(
-  userChoice: Decision,
-  preferred: Decision
-) {
-  if (userChoice === preferred) {
-    return {
-      score: 92,
-      feedback:
-        "Strong alignment with key signals and risk profile. This decision balances upside with execution readiness.",
-    };
-  }
-
-  if (
-    (preferred === "WAIT" && userChoice === "ACT") ||
-    (preferred === "ACT" && userChoice === "WAIT")
-  ) {
-    return {
-      score: 68,
-      feedback:
-        "You identified opportunity, but timing and execution risks may be underestimated.",
-    };
-  }
-
-  return {
-    score: 48,
-    feedback:
-      "This decision prioritizes conviction over signal balance, increasing downside exposure.",
-  };
-}
-
-/* =========================
-   Scenarios
-========================= */
 const scenarios = [
   {
     title: "Scale Marketing in Jaipur?",
-    context: "D2C skincare brand sees rising demand but thin margins.",
+    context:
+      "A D2C skincare brand sees rising demand in Jaipur, but margins are under pressure.",
     signals: [
       "Google Trends up 2.3× in 90 days",
       "CAC increased by 18%",
       "Repeat rate steady at 32%",
       "Inventory constrained for 6 weeks",
     ],
-    preferredDecision: "WAIT" as Decision,
     reasoning: {
-      ACT: "Momentum is strong and delay risks losing the market.",
+      ACT: "Momentum is strong and delaying could allow competitors to capture demand.",
       WAIT:
-        "Demand is real, but supply and CAC constraints make scaling premature.",
+        "Demand exists, but CAC and supply constraints make scaling risky right now.",
       KILL:
-        "Marketing spend without fulfillment readiness damages brand trust.",
+        "Scaling without fixing execution risks long-term brand damage.",
     },
+    myDecision: "WAIT",
     myLogic:
-      "I chose WAIT because it preserves upside while fixing execution bottlenecks. Acting now increases burn without improving long-term ROI.",
+      "WAIT preserves upside while fixing CAC and inventory. Acting now increases burn without improving ROI.",
   },
   {
     title: "Launch Premium Serum Variant?",
-    context: "Existing niacinamide serum performs well in Tier-1 cities.",
+    context:
+      "A niacinamide serum performs strongly among high-LTV Tier-1 customers.",
     signals: [
       "Top 20% users generate 48% revenue",
-      "Price elasticity low in Tier-1",
+      "Price sensitivity low in Tier-1",
       "Manufacturing cost +22%",
       "Brand awareness still mid-level",
     ],
-    preferredDecision: "ACT" as Decision,
     reasoning: {
       ACT:
-        "High-LTV users justify premium expansion with controlled positioning.",
+        "High-LTV users justify a controlled premium launch without mass rollout.",
       WAIT:
-        "Brand pull isn’t strong enough yet for mass premium perception.",
+        "Brand pull may not yet support premium positioning at scale.",
       KILL:
-        "Premium too early risks confusing value-conscious users.",
+        "Premium launch could confuse value-focused users.",
     },
+    myDecision: "ACT",
     myLogic:
-      "I chose ACT because the data supports a targeted premium launch, not mass rollout. This maximizes LTV without brand dilution.",
+      "ACT allows targeted premium testing to maximize LTV without brand dilution.",
   },
   {
     title: "Enter Quick Commerce (10-min delivery)?",
-    context: "Competitors are moving to Blinkit / Zepto.",
+    context:
+      "Competitors are moving to Blinkit and Zepto for faster delivery.",
     signals: [
       "Demand spikes during flash sales",
-      "Margins drop by 12–15%",
+      "Margins drop 12–15%",
       "Returns increase 9%",
       "Brand visibility improves",
     ],
-    preferredDecision: "WAIT" as Decision,
     reasoning: {
       ACT: "Speed and visibility could unlock new demand pools.",
       WAIT:
-        "Pilot in one city to validate economics before committing.",
+        "Pilot in one city to validate economics before full commitment.",
       KILL:
         "Quick commerce undermines premium brand positioning.",
     },
+    myDecision: "WAIT",
     myLogic:
-      "WAIT allows learning without permanent margin damage. Speed is valuable, but brand equity is harder to rebuild.",
+      "WAIT enables learning without permanent margin damage or brand erosion.",
   },
 ];
 
-/* =========================
-   Component
-========================= */
 export default function DecisionSimulator() {
   const [index, setIndex] = useState(0);
   const [choice, setChoice] = useState<Decision | null>(null);
   const [recruiterMode, setRecruiterMode] = useState(false);
-  const [score, setScore] = useState<{
-    score: number;
-    feedback: string;
-  } | null>(null);
 
   const scenario = scenarios[index];
 
   return (
-    <main className="min-h-screen px-6 py-20 max-w-4xl mx-auto">
+    <main className="min-h-screen bg-black text-white px-6 py-20 max-w-4xl mx-auto">
       {/* Header */}
       <motion.h1
         initial={{ opacity: 0, y: 20 }}
@@ -130,12 +91,12 @@ export default function DecisionSimulator() {
         Executive Decision Simulator
       </motion.h1>
 
-      <p className="text-gray-400 mb-8">
-        Real business trade-offs. No right answers. Only reasoning.
+      <p className="text-gray-400 mb-10">
+        There are no right answers — only better reasoning.
       </p>
 
       {/* Recruiter Mode */}
-      <div className="flex items-center gap-3 mb-10">
+      <div className="flex items-center gap-3 mb-8">
         <input
           type="checkbox"
           checked={recruiterMode}
@@ -157,8 +118,8 @@ export default function DecisionSimulator() {
         </p>
 
         <ul className="list-disc list-inside text-sm text-gray-300 space-y-1">
-          {scenario.signals.map((signal, i) => (
-            <li key={i}>{signal}</li>
+          {scenario.signals.map((s, i) => (
+            <li key={i}>{s}</li>
           ))}
         </ul>
       </div>
@@ -168,15 +129,7 @@ export default function DecisionSimulator() {
         {(["ACT", "WAIT", "KILL"] as Decision[]).map((action) => (
           <button
             key={action}
-            onClick={() => {
-              setChoice(action);
-              setScore(
-                evaluateDecision(
-                  action,
-                  scenario.preferredDecision
-                )
-              );
-            }}
+            onClick={() => setChoice(action)}
             className={`px-5 py-2 rounded-full text-sm font-medium transition
               ${
                 action === "ACT"
@@ -202,42 +155,20 @@ export default function DecisionSimulator() {
             Your decision: <b>{choice}</b>
           </p>
 
-          <p className="text-gray-300 text-sm mb-3">
+          <p className="text-gray-300 text-sm mb-4">
             <b>Executive reasoning:</b>{" "}
             {scenario.reasoning[choice]}
           </p>
 
-          {/* Score */}
-          {score && (
-            <div className="mt-6 border-t border-gray-700 pt-4">
-              <p className="text-sm text-gray-400 mb-1">
-                Decision Quality Score
-              </p>
-
-              <div className="flex items-center gap-3">
-                <span className="text-3xl font-semibold">
-                  {score.score}
-                </span>
-                <span className="text-sm text-gray-400">
-                  / 100
-                </span>
-              </div>
-
-              <p className="mt-2 text-sm text-gray-300">
-                {score.feedback}
-              </p>
-            </div>
-          )}
-
-          {/* Recruiter Mode Insight */}
           {recruiterMode && (
-            <div className="mt-6 text-sm text-gray-400">
-              <p className="mb-1">
-                <b>My preferred decision:</b>{" "}
-                {scenario.preferredDecision}
+            <>
+              <p className="text-sm text-gray-400">
+                My decision: <b>{scenario.myDecision}</b>
               </p>
-              <p>{scenario.myLogic}</p>
-            </div>
+              <p className="text-gray-300 text-sm mt-2">
+                {scenario.myLogic}
+              </p>
+            </>
           )}
         </motion.div>
       )}
@@ -248,26 +179,29 @@ export default function DecisionSimulator() {
           disabled={index === 0}
           onClick={() => {
             setChoice(null);
-            setScore(null);
             setIndex(index - 1);
           }}
           className="text-sm text-gray-400 hover:text-white disabled:opacity-30"
         >
-          ← Previous Case
+          ← Previous
         </button>
 
         <button
           disabled={index === scenarios.length - 1}
           onClick={() => {
             setChoice(null);
-            setScore(null);
             setIndex(index + 1);
           }}
           className="text-sm text-gray-400 hover:text-white disabled:opacity-30"
         >
-          Next Case →
+          Next →
+          <p className="text-xs text-gray-500 mb-3">
+  Choose the action you would take as the decision owner.
+</p>
+
         </button>
       </div>
+      <NavBar />
     </main>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import NavBar from "../components/NavBar";
 
 export default function HireMe() {
   return (
@@ -85,6 +86,7 @@ export default function HireMe() {
           </a>
         </div>
       </section>
+      <NavBar />
     </main>
   );
 }

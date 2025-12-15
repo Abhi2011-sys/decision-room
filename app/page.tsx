@@ -1,88 +1,86 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState } from "react";
+import Link from "next/link";
+import NavBar from "./components/NavBar";
 
-export default function CasesPage() {
-  const [showDecision, setShowDecision] = useState(false);
-
+export default function HomePage() {
   return (
-    <main className="min-h-screen px-6 py-20 flex justify-center">
-      <div className="max-w-4xl w-full">
-        {/* Header */}
+    <main className="min-h-screen bg-black text-white px-6 md:px-10">
+      {/* NAVBAR */}
+      <NavBar />
+
+      {/* HERO */}
+      <section className="min-h-screen flex items-center justify-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-5xl text-center"
         >
-          <h1 className="text-4xl font-semibold">Decision Cases</h1>
-          <p className="mt-3 text-gray-400 text-lg">
-            Real business scenarios. Real signals. Real decisions.
-          </p>
-        </motion.div>
+          <h1 className="text-5xl md:text-6xl font-bold leading-tight">
+            I build systems that
+            <br />
+            <span className="text-gray-400">
+              turn data into decisions
+            </span>
+          </h1>
 
-        {/* Case Card */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="mt-12 border border-gray-700 rounded-2xl p-6"
-        >
-          <p className="text-sm text-gray-400 mb-2">Case 01</p>
-
-          <h2 className="text-2xl font-semibold">
-            Should we scale marketing in Jaipur?
-          </h2>
-
-          <p className="mt-3 text-gray-400">
-            A skincare brand is considering aggressive marketing expansion in
-            Jaipur. You are responsible for making the final decision.
+          <p className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto">
+            Data Analyst with strong product and business judgment.
+            I focus on helping teams decide when to ACT, WAIT, or KILL —
+            not just what the numbers say.
           </p>
 
-          {/* Signals */}
-          <div className="mt-8 space-y-3 text-sm text-gray-300">
-            <p>📈 Market Demand: Moderate acceleration detected</p>
-            <p>💰 Financial Forecast: Profit margins under pressure</p>
-            <p>😊 Customer Sentiment: Increase in negative feedback</p>
-            <p>🚨 Risk Exposure: Elevated transaction risk</p>
+          {/* CTA */}
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/cases">
+              <button className="px-8 py-3 rounded-full bg-white text-black font-medium hover:bg-gray-200 hover:-translate-y-0.5 transition">
+                View Decision Cases →
+              </button>
+            </Link>
+
+            <Link href="/simulator">
+              <button className="px-8 py-3 rounded-full border border-gray-600 hover:border-white hover:-translate-y-0.5 transition">
+                Try Decision Simulator →
+              </button>
+            </Link>
           </div>
 
-          {!showDecision && (
-            <button
-              onClick={() => setShowDecision(true)}
-              className="mt-8 px-5 py-2 rounded-xl border border-gray-600 hover:border-white transition"
-            >
-              Reveal Executive Decision →
-            </button>
-          )}
-
-          {/* Decision */}
-          {showDecision && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="mt-8 border-t border-gray-700 pt-6"
-            >
-              <h3 className="text-xl font-semibold text-red-400">
-                Decision: DO NOT SCALE
-              </h3>
-
-              <p className="mt-3 text-gray-300">
-                While demand exists, multiple risk signals suggest that scaling
-                at this stage would increase downside exposure.
-              </p>
-
-              <ul className="mt-4 list-disc list-inside text-gray-400 text-sm space-y-1">
-                <li>Demand acceleration is not yet strong</li>
-                <li>Profit forecasts indicate margin compression</li>
-                <li>Customer trust is deteriorating</li>
-                <li>Risk exposure is elevated</li>
-              </ul>
-            </motion.div>
-          )}
+          <p className="mt-10 text-sm text-gray-600">
+            Built by Abhishek • Decision Intelligence Portfolio
+          </p>
         </motion.div>
-      </div>
+      </section>
+
+      {/* WHY DIFFERENT */}
+      <section className="max-w-4xl mx-auto pb-24">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-2xl font-semibold mb-4">
+            Why this is different
+          </h2>
+
+          <ul className="space-y-3 text-gray-400 text-sm">
+            <li>
+              • Most portfolios show dashboards. This one shows decisions.
+            </li>
+            <li>
+              • I focus on trade-offs, risk, and timing — not vanity metrics.
+            </li>
+            <li>
+              • Every project answers a real business question.
+            </li>
+            <li>
+              • You can simulate how I think, not just read about it.
+            </li>
+          </ul>
+        </motion.div>
+      </section>
     </main>
   );
 }
