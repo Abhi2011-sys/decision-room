@@ -86,9 +86,3 @@ export default function CasesPage() {
     </main>
   );
 }
-<a
-  href="/cases"
-  className="text-sm text-gray-400 hover:text-white transition"
->
-  View Decision Cases →
-</a>
